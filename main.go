@@ -58,8 +58,14 @@ func (mycli *MyClient) eventHandler(evt interface{}) {
 		fmt.Println("Response:", response)
 
 		userJid := types.NewJID(v.Info.Sender.User, types.DefaultUserServer)
-		mycli.WAClient.SendMessage(context.Background(), userJid, "", response)
+		
+		// clients need to get updated and the syntax of the send message function has changed in the newer packages
+		_, err = mycli.WAClient.SendMessage(context.Background(), userJid, response, whatsmeow.SendRequestExtra{})
+        	if err != nil {
+            		fmt.Println("Error sending message:", err)
+        	}
 
+		// this syntax is running with the newer versions and the code works again
 	}
 }
 
